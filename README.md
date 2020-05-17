@@ -62,7 +62,9 @@ Now you should be ready to rock. Open a terminal window in the `Arduino`-subdire
 	sudo dfu-programmer atmega16u2 erase
 	sudo dfu-programmer atmega16u2 flash Joystick.hex
 	sudo dfu-programmer atmega16u2 reset
-  ```
+  	```
+	
+> note from @briaguya - I ran into `dfu-programmer: no device present.` a couple times throughout the process. To get past it I just retried the command until it gave me something more promising
 
 #### Windows
 
