@@ -1,23 +1,23 @@
-## ArduinoTAS
+# ArduinoTAS
 This project should emulate a controller with the Arduino and play TAS on the Nintendo Switch.
 
 Uses the LUFA library and reverse-engineering of the HORIPAD for Nintendo Switch for accurate controller emulation.
 
-### Wait, what?
+## Wait, what?
 On June 20, 2017, Nintendo released System Update v3.0.0 for the Nintendo Switch. Along with a number of additional features that were advertised or noted in the changelog, additional hidden features were added. One of those features allows for the use of compatible USB controllers on the Nintendo Switch, such as the Pokken Tournament Pro Pad.
 
 Unlike the Wii U, which handles these controllers on a 'per-game' basis, the Switch treats the Pokken controller as if it was a Switch Pro Controller. Along with having the icon for the Pro Controller, it functions just like it in terms of using it in other games, apart from the lack of physical controls such as analog sticks, the buttons for the stick clicks, or other system buttons such as Home or Capture.
 
 The original version of the code that this repo is based off of emulated the Pokken Tournament Pro Pad, but changes have been made to support the HORIPAD wired controller for Nintendo Switch instead. In addition, many additional features/improvements have been added.
 
-### Setup
+## Setup
 
-#### Prerequisites
+### Prerequisites
 * A LUFA-compatible microcontroller such as the Teensy 2.0++, Arduino UNO R3, or the Arduino Micro
 * A USB-to-UART adapter. In a pinch, an Arduino UNO R3 with the ATMega328p disabled (connect RESET to GND) will work.
 * A machine running Windows. Running on Linux or Mac could also be possible, but hasn't been tested.
 
-#### How to use
+### How to use
 
 Besides the Arduino you also need an UART to USB-Bridge. [This one](https://www.amazon.de/USB-TTL-Konverter-Modul-mit-eingebautem-CP2102/dp/B00AFRXKFU/) from Amazon works for me. You also need an HDMI- to VGA-Adapter and either a HDMI or VGA splitter to still view the output of the Switch while running the task; If your capture card has an mirroring output that works too.
 
@@ -34,7 +34,16 @@ In case you see issues with controller conflicts while in docked mode, try using
 
 This repository has been tested using an Arduino Uno.
 
-#### Compiling this Project
+### Compiling this Project
+
+#### Linux (tested on Manjaro)
+Install [`arduino`](https://www.archlinux.org/packages/community/x86_64/arduino/) and [`arduino-avr-core`](https://www.archlinux.org/packages/community/any/arduino-avr-core/)
+
+`cd ./Arduino`
+
+`make`
+
+#### Windows
 
 First of all, you need a Linux VM (for example in [VirtualBox](https://www.virtualbox.org/), tested with Ubuntu). Here you need to install the [ArduinoIDE](https://www.arduino.cc/download_handler.php?f=/arduino-1.8.10-linux64.tar.xz). Next, you edit the makefile and insert your installation dir at ARDUINO_PATH (keep the additions at the end to let it point to the correct dir).
 
@@ -42,7 +51,20 @@ After every restart of the Linux VM you need to extend the $PATH-Variable by run
 
 Now you should be ready to rock. Open a terminal window in the `Arduino`-subdirectory, type `make`, and hit enter to compile. If all goes well, the printout in the terminal will let you know it finished the build! Follow the directions on flashing `Joystick.hex` onto your Arduino, which can be found below.
 
-#### Flashing it onto the Arduino Uno
+### Flashing it onto the Arduino Uno
+
+#### Linux (tested on Manjaro)
+* Follow the [DFU mode directions](https://www.arduino.cc/en/Hacking/DFUProgramming8U2) to flash `Joystick.hex` onto the 16u2 of your Arduino UNO R3.  Abridged instructions:
+	* Jumper RESET and GND of the 16u2
+	<img src="https://www.arduino.cc/en/uploads/Hacking/Uno-front-DFU-reset.png" width="300">
+
+	```
+	sudo dfu-programmer atmega16u2 erase
+	sudo dfu-programmer atmega16u2 flash Joystick.hex
+	sudo dfu-programmer atmega16u2 reset
+  ```
+
+#### Windows
 
 You need the program called `Flip` on your Windows PC to flash the compiled `Joystick.hex` file onto your Arduino. You can download it [here](https://www.microchip.com/developmenttools/ProductDetails/flip).
 
@@ -58,11 +80,11 @@ In Flip, first select `ATmega16u2` in Device -> Select and press OK. After that,
 
 Select Run in the bottom left corner to flash the .hex file onto the Arduino. When done, disconnect the Arduino from your computer and reconnect the TX & RX-Pins to the bridge.
 
-#### Run
+## Run
 
 To start a TAS file, simply start the clientTAS.py, it will run the script `script0.txt` in the same directory. Make sure your `port` on the top of that file is correct and the pins of TX & RX on your Arduino are connected correctly. Then connect your Arduino via USB to the Switch. After starting the program, you can control the switch with the keyboard to do the setup for the TAS-file.The button mapping is visible below. After you are done, press ESC and see the magic happen!
 
-#### Button mapping
+### Button mapping
 
 Keyboard key | ProCon-Button
 ------------ | --------------
@@ -83,6 +105,6 @@ X | L_CLICK
 
 Arrows are used for DPAD-navigation, WASD controls the right stick. The special key `t` presses L and R at the same time; this is used for syncing.
 
-#### Thanks
+## Thanks
 
 Thanks to Shiny Quagsire for his [Splatoon post printer](https://github.com/shinyquagsire23/Switch-Fightstick), progmem for his [original discovery](https://github.com/progmem/Switch-Fightstick) and wchill for his [SwitchInputEmulator](https://github.com/wchill/SwitchInputEmulator), this project is based on his.
